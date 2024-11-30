@@ -23,8 +23,8 @@
                     <ColumnDefinition></ColumnDefinition>
                     <ColumnDefinition></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <Button Grid.Column="0" Grid.Row="0" Height="30" Width="140" Click="ReadFromFileByttonClick">Считать из файла</Button>
-                <Button Grid.Column="1" Grid.Row="0" Height="30" Width="140" Click="WriteToFileInputDataByttonClick">Входные данные в файл</Button>
+                <Button Grid.Column="0" Grid.Row="0" Height="30" Width="140" Click="ReadFromFileButtonClick">Считать из файла</Button>
+                <Button Grid.Column="1" Grid.Row="0" Height="30" Width="140" Click="WriteToFileInputDataButtonClick">Входные данные в файл</Button>
                 <Button Grid.Column="2" Grid.Row="0" Height="30" Width="140" Click="WriteToFileOutputDataButtonClick">Вывод в файл</Button>
                 <Button Grid.Column="3" Grid.Row="0" Height="30" Width="140" Click="OpenWindowAuthorButtonClick">Автор</Button>
                 <Button Grid.Column="4" Grid.Row="0" Height="30" Width="140" Click="OpenWindowThemeButtonClick">Тема</Button>
@@ -42,12 +42,17 @@
                 <RadioButton  Grid.Column="4" Grid.Row="1" VerticalAlignment="Center" Content="Леволинейная граммат." x:Name="LeftLinear" IsChecked="True" GroupName="LinearGramRadioButton"></RadioButton>
                 <RadioButton Grid.Column="4" Grid.Row="2" VerticalAlignment="Center" Content="Праволинейная граммат." x:Name="RightLinear" GroupName="LinearGramRadioButton"></RadioButton>
 
-                <Button Grid.Column="0" Grid.Row="3" Height="30" Width="140" Click="CalculateAllByttonClick">Посчитать и вывести</Button>
-                <Button Grid.Column="1" Grid.Row="3" Height="30" Width="140" Click="OutputAllDataChainsByttonClick">Процесс генерации</Button>
+
+                <Label Grid.Column="0" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Right">Длина цепочек (от и до):</Label>
+                <TextBox Grid.Column="1" Grid.Row="3" Height="30" Width="140" x:Name="MinChainLengthInput"></TextBox>
+                <TextBox Grid.Column="2" Grid.Row="3" Height="30" Width="140" x:Name="MaxChainLengthInput"></TextBox>
+                <Button Grid.Column="3" Grid.Row="3" Height="30" Width="140" Click="CalculateAllButtonClick">Посчитать и вывести</Button>
+                <Button Grid.Column="4" Grid.Row="3" Height="30" Width="140" Click="OutputAllDataChainsButtonClick">Процесс генерации</Button>
 
 
             </Grid>
         </Border>
+        <TextBlock x:Name="ErrorTextBlock" TextWrapping="Wrap" Width="800"></TextBlock>
             <StackPanel Orientation="Horizontal">
                 <StackPanel>
                     <Label HorizontalAlignment="Center">Регулярная грамматика:</Label>

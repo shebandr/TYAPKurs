@@ -5,9 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TYAPKurs"
         mc:Ignorable="d"
-            Title="О разработчике" Height="170" Width="620">
+            Title="О разработчике" Height="140" Width="400">
     <TextBlock Width="600" Padding="10">
-    Шебанов Андрей из группы ИП-112<LineBreak/>
-    Полный код данной программы можно найти по ссылке:
+        Автор:<LineBreak/>
+        Шебанов Андрей Георгиевич из группы ИП-112<LineBreak/>
+        Полный код данной программы можно найти по ссылке: <LineBreak/>
+        <Hyperlink NavigateUri="https://github.com/shebandr/TYAPKurs" RequestNavigate="Hyperlink_RequestNavigate">
+            https://github.com/shebandr/TYAPKurs
+        </Hyperlink>
     </TextBlock>
 </Window>
