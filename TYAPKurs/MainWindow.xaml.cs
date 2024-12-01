@@ -13,19 +13,19 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TYAPKurs.Properties;
 
 namespace TYAPKurs
 {
-	/// <summary>
-	/// Логика взаимодействия для MainWindow.xaml
-	/// </summary>
+
 	public partial class MainWindow : Window
 	{
+		private List<List<List<string>>> chains = new List<List<List<string>>>();
 		public MainWindow()
 		{
 			InitializeComponent();
-/*			RegularGrammarOutput.Text = "a\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\na";
-*/		}
+
+		}
 
 		private void ReadFromFileButtonClick(object sender, RoutedEventArgs e)
 		{
@@ -106,11 +106,24 @@ namespace TYAPKurs
 			saveFileDialog.ShowDialog();
 
 			string filePath = saveFileDialog.FileName;
-			
+			List<string> outputChains = new List<string>();
 			if (filePath == "")
 			{
 				return;
 			}
+			for (int i = 0; i < chains.Count; i++)
+			{
+				outputChains.Add("");
+				outputChains[i] += i + ") ";
+				for (int q = 0; q < chains[i].Count - 1; q++)
+				{
+					outputChains[i] += chains[i][q][0] + chains[i][q][1] + "->";
+				}
+				outputChains[i] += chains[i][chains[i].Count - 1][0] + chains[i][chains[i].Count - 1][1] + " \n";
+			}
+			Console.WriteLine("Цепочек сгенерировано: " + chains.Count);
+			ErrorTextBlock.Text = "";
+			FileProcessor.WriteToFile(filePath, outputChains);
 			Console.WriteLine(filePath);
 
 		}
@@ -175,7 +188,7 @@ namespace TYAPKurs
 		{
 			List<string> settings = GetAllSettings();
 			List<List<string>> rules = new List<List<string>>();
-			List<List<List<string>>> chains = new List<List<List<string>>>();
+			
 			string outputRules = "";
 			string outputChains = "";
 
@@ -261,19 +274,5 @@ namespace TYAPKurs
 			}
 		}
 		
-
-
-/*		public static void SetError(string message)
-		{
-			if(message == "")
-			{
-				ErrorTextBlock.Text = "";
-				ErrorTextBlock.Height = 0;
-			} else
-			{
-				ErrorTextBlock.Text = message;
-				ErrorTextBlock.Height = 30;
-			}
-		}*/
 	}
 }

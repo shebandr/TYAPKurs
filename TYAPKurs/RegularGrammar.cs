@@ -135,13 +135,11 @@ namespace TYAPKurs
 		{
 
 			List<List<string>>output = new List<List<string>>();
-			//шизоплан, строка правила должна выглядеть как 3 подстроки, разделенные проеблом при записи в файл, 1 подстрока - название правила, вторая и третья - нетерминальный и терминальный символы
-			//длина будет выбираться как кратная нужному числу в указанном диапазоне, то есть (длина начала + длина конца + добивка их до кратности + нужное число кратных итераций
-			
+
 			List<string> alphabetList = alphabet.Split(' ').ToList();
 
 			
-			int q = 0; //переменная для обозначения текущего шага в переходе
+			int q = 0; 
 			
 
 			if(side == 1)
@@ -153,14 +151,7 @@ namespace TYAPKurs
 
 			
 			output.Add(new List<string> {"S", startChain, "Q"+q});
-			//тут должно идти разветвление на 3 пути: 
-			// 1 - нам не нужен цикл в правилах по добавлению кратных цепочек, но нужно добивать кратность
-			// 2 - нам не нужно добавление нескольких символов, чтобы добить кратность основной цепочки, но нужен цикл в правилах для получения разной кратной длины
-			// 3 - нам нужно это все
 
-
-
-			//2 добавление цикла для кратности:
 			if (maxChainLength - minChainLength >= multiple)
 			{
 				for (int i = 0; i < multiple-1; i++)
@@ -179,8 +170,7 @@ namespace TYAPKurs
 			}
 
 
-			//1: 
-			//внезапная переделка: тут нужно делать q таким, чтобы после него кратность шла как надо
+			
 			if (startChain.Length + endChain.Length % multiple != 0)
 			{
 				foreach (string symbol in alphabetList)
@@ -266,7 +256,7 @@ namespace TYAPKurs
 			}
 
 			if (side == 0)
-			{// шизоидея - гонять тут список списков, где в списке первым (или вторым) элементом будет состояние, а другим элементом - текущая строка
+			{
 
 				for(int i = 0; i < rules.Count; i++)
 				{
@@ -276,7 +266,6 @@ namespace TYAPKurs
 					}
 					if (currentChainList[0] == rules[i][0].ToString() || currentChainList[0].ToString() == FinalChar)
 					{
-						/*Console.WriteLine(currentChainList[0] + " " + rules[i][0].ToString());*/
 						if (currentChainList[0] == FinalChar && currentChainList[1].Length >= minChainLength)
 						{
 							Console.WriteLine("добавляю шизу в общий список: " + allChangesChain[allChangesChain.Count - 1][0]);
@@ -331,34 +320,10 @@ namespace TYAPKurs
 					}
 					else
 					{
-						/*						Console.WriteLine("Нет вызова рекурсии" + currentChainList[currentChainList.Count - 1] + " " + rules[i][0].ToString() + " " + rules[i][1].ToString() + " " + rules[i][2].ToString() + " " + currentChainList[1].Length + " " + maxChainLength);*/
 					}
 				}
 
 			}
-			/*{
-
-				for (int i = 0; i < rules.Count; i++)
-				{
-					if (currentChainList[0] == rules[i][0].ToString() && currentChainList[2].Length <= maxChainLength)
-					{
-						Console.WriteLine(currentChainList[0] + " " + rules[i][0].ToString() + " " + currentChainList[2].Length);
-						if (currentChainList[0] == "" && currentChainList[2].Length <= maxChainLength && currentChainList[2].Length >= minChainLength)
-						{
-							Console.WriteLine("добавляю шизу в общий список: " + allChangesChain[allChangesChain.Count - 1]);
-							AllChains.Add(allChangesChain);
-						}
-						else
-						{
-
-							List<string> currentChainList2 = new List<string> { rules[i][1].ToString(), rules[i][2].ToString() + currentChainList[currentChainList.Count - 1] };
-							List<string> allChangesChain2 = allChangesChain;
-							allChangesChain2.Add(rules[i][2].ToString() + currentChainList[currentChainList.Count - 1]);
-							RecursiveCalc(rules, minChainLength, maxChainLength, side, currentChainList2, allChangesChain2, recursionLevel + 1);
-						}
-					}
-				}
-			}*/
 
 		}
 

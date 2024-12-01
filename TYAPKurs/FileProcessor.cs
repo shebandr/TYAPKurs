@@ -54,7 +54,6 @@ namespace TYAPKurs
 			}
 			catch (Exception ex)
 			{
-				// Вы можете заменить это на более детальное логирование ошибки
 				Console.WriteLine($"Ошибка при записи в файл: {ex.Message}");
 				return $"Ошибка при записи в файл: {ex.Message}";
 			}
