@@ -144,14 +144,14 @@ namespace TYAPKurs
 			int startChainLength = startChain.Length;
 			int endChainLength = endChain.Length;
 
-			if (side == 1)
+			if (side == 0)
 			{
 				string a = startChain;
 				startChain = endChain;
 				endChain = a;
 			}
 
-			if (startChain != "" || startChain.Trim()=="")
+			if (startChain == "" || startChain.Trim()=="")
 			{
 				foreach(string symbol in alphabetList)
 				{
