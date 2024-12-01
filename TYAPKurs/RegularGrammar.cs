@@ -142,9 +142,14 @@ namespace TYAPKurs
 
 			
 			int q = 0; //переменная для обозначения текущего шага в переходе
-			int maxq = q; //переменная для обозначения максимальной цифры правила, которая уже была записана
+			
 
-
+			if(side == 1)
+			{
+				string a = startChain;
+				startChain = endChain;
+				endChain = a;
+			}
 
 			
 			output.Add(new List<string> {"S", startChain, "Q"+q});
@@ -219,9 +224,7 @@ namespace TYAPKurs
 					o[2] = a;
 					o[1] = b;
 				}
-				string tempStartChain = output[output.Count-1][1];
-				output[output.Count - 1][1] = output[0][1];
-				output[0][1] = tempStartChain;
+
 			}
 
 
@@ -286,63 +289,51 @@ namespace TYAPKurs
 						}
 						else if(currentChainList[0].ToString() != FinalChar)
 						{
-							if (allChangesChain.Count > 0)
-							{
-
-								/*Console.WriteLine("Вызываю рекурсию: " + currentChainList[currentChainList.Count - 1] + " " + rules[i][0].ToString() + " " + rules[i][1].ToString() + " " + rules[i][2].ToString() + " " + currentChainList[1].Length + " " + maxChainLength);*/
-							}
-							List<string> currentChainList2 = new List<string> { rules[i][2].ToString(), currentChainList[currentChainList.Count - 1] + rules[i][1].ToString() };
+							List<string> currentChainList2 = new List<string> { rules[i][2].ToString(), rules[i][1].ToString() + currentChainList[1] };
 							List<List<string>> allChangesChain2 = allChangesChain.ToList();
-							allChangesChain2.Add(new List<string> { currentChainList[currentChainList.Count - 1] + rules[i][1].ToString(), rules[i][2].ToString() });
+							allChangesChain2.Add(new List<string> {rules[i][1].ToString() + currentChainList[1], rules[i][2].ToString() });
 							RecursiveCalc(rules, minChainLength, maxChainLength, side, currentChainList2, allChangesChain2, recursionLevel+1);
 						}
 					} else
 					{
-/*						Console.WriteLine("Нет вызова рекурсии" + currentChainList[currentChainList.Count - 1] + " " + rules[i][0].ToString() + " " + rules[i][1].ToString() + " " + rules[i][2].ToString() + " " + currentChainList[1].Length + " " + maxChainLength);*/
 					}
 				}
 				
 			}
 			else
-			{// шизоидея - гонять тут список списков, где в списке первым (или вторым) элементом будет состояние, а другим элементом - текущая строка
-
-				/*for (int i = 0; i < rules.Count; i++)
+			{
+				
+				for (int i = 0; i < rules.Count; i++)
 				{
-					if (currentChainList[2].Length > maxChainLength)
+					if (currentChainList[0].Length > maxChainLength)
 					{
 						break;
 					}
-					if (currentChainList[0] == rules[i][0].ToString() || currentChainList[0].ToString() == FinalChar)
+					if (currentChainList[1] == rules[i][0].ToString() || currentChainList[1].ToString() == FinalChar)
 					{
-						*//*Console.WriteLine(currentChainList[0] + " " + rules[i][0].ToString());*//*
-						if (currentChainList[0] == FinalChar && currentChainList[2].Length >= minChainLength)
+						if (currentChainList[1] == FinalChar && currentChainList[0].Length >= minChainLength)
 						{
-							Console.WriteLine("добавляю шизу в общий список: " + allChangesChain[allChangesChain.Count - 1]);
-							foreach (string change in allChangesChain)
+							Console.WriteLine("добавляю шизу в общий список: " + allChangesChain[allChangesChain.Count - 1][1]);
+							foreach (List<string> change in allChangesChain)
 							{
-								Console.Write(change + "->");
+								Console.Write(change[0] + change[1] + "->");
 							}
 							Console.WriteLine("\n");
 							AllChains.Add(allChangesChain);
 						}
-						else if (currentChainList[0].ToString() != FinalChar)
+						else if (currentChainList[1].ToString() != FinalChar)
 						{
-							if (allChangesChain.Count > 0)
-							{
-
-								*//*Console.WriteLine("Вызываю рекурсию: " + currentChainList[currentChainList.Count - 1] + " " + rules[i][0].ToString() + " " + rules[i][1].ToString() + " " + rules[i][2].ToString() + " " + currentChainList[1].Length + " " + maxChainLength);*//*
-							}
-							List<string> currentChainList2 = new List<string> { rules[i][1].ToString(), currentChainList[currentChainList.Count - 1] + rules[i][2].ToString() };
-							List<string> allChangesChain2 = allChangesChain.ToList();
-							allChangesChain2.Add(rules[i][2].ToString() + currentChainList[currentChainList.Count - 1]);
+							List<string> currentChainList2 = new List<string> { currentChainList[0] + rules[i][2].ToString(), rules[i][1].ToString()};
+							List<List<string>> allChangesChain2 = allChangesChain.ToList();
+							allChangesChain2.Add(new List<string> {rules[i][1].ToString(),currentChainList[0] + rules[i][2].ToString() });
 							RecursiveCalc(rules, minChainLength, maxChainLength, side, currentChainList2, allChangesChain2, recursionLevel + 1);
 						}
 					}
 					else
 					{
-						*//*						Console.WriteLine("Нет вызова рекурсии" + currentChainList[currentChainList.Count - 1] + " " + rules[i][0].ToString() + " " + rules[i][1].ToString() + " " + rules[i][2].ToString() + " " + currentChainList[1].Length + " " + maxChainLength);*//*
+						/*						Console.WriteLine("Нет вызова рекурсии" + currentChainList[currentChainList.Count - 1] + " " + rules[i][0].ToString() + " " + rules[i][1].ToString() + " " + rules[i][2].ToString() + " " + currentChainList[1].Length + " " + maxChainLength);*/
 					}
-				}*/
+				}
 
 			}
 			/*{

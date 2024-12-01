@@ -153,11 +153,6 @@ namespace TYAPKurs
 					for (int i = 0; i < chains.Count; i++)
 					{
 						outputChains += i + ") ";
-						Console.WriteLine(chains[i][chains[i].Count - 1]);
-						if (chains[i][chains[i].Count - 1][0].Length - 1 % Int32.Parse(settings[3]) != 0)
-						{
-							Console.WriteLine("ЗРАДА");
-						}
 						outputChains += chains[i][chains[i].Count - 1][0] + chains[i][chains[i].Count - 1][1] + " \n";
 					}
 					Console.WriteLine("Цепочек сгенерировано: " + chains.Count);
@@ -201,11 +196,6 @@ namespace TYAPKurs
 					for (int i = 0; i < chains.Count; i++)
 					{
 						outputChains += i + ") ";
-						Console.WriteLine(chains[i][chains[i].Count - 1]);
-						if (chains[i][chains[i].Count - 1][0].Length-1 % Int32.Parse(settings[3]) != 0)
-						{
-							Console.WriteLine("ЗРАДА");
-						}
 						for(int q = 0; q< chains[i].Count-1; q++)
 						{
 							outputChains += chains[i][q][0] + chains[i][q][1] + "->";
