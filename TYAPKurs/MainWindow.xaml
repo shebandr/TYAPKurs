@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TYAPKurs"
         mc:Ignorable="d"
-        Title="MainWindow" Height="620" Width="815">
+        Title="MainWindow" Height="640" Width="815">
     <StackPanel>
         <Border Background="LightGray" BorderBrush="Black" BorderThickness="1px" Margin="3px">
             <Grid Height="160" VerticalAlignment="Top">
@@ -58,7 +58,7 @@
                     <Label HorizontalAlignment="Center">Регулярная грамматика:</Label>
                      <Border Background="LightGray" BorderBrush="Black" BorderThickness="1px" Margin="3">
                         <ScrollViewer Height="380">
-                           <TextBlock Width="375"  x:Name="RegularGrammarOutput"> </TextBlock>
+                           <TextBlock Width="375"  x:Name="RegularGrammarOutput" TextWrapping="Wrap"> </TextBlock>
                         </ScrollViewer>
                 </Border>
                 </StackPanel>
@@ -66,7 +66,7 @@
                     <Label HorizontalAlignment="Center">Цепочки:</Label>
                     <Border Background="LightGray" BorderBrush="Black" BorderThickness="1px" Margin="3">
                     <ScrollViewer Height="380">
-                        <TextBlock Width="375" x:Name="AllChainsOutput"></TextBlock>
+                        <TextBlock Width="375" x:Name="AllChainsOutput" TextWrapping="Wrap"></TextBlock>
                     </ScrollViewer>
                 </Border>
   
