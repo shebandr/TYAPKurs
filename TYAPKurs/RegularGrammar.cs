@@ -139,18 +139,38 @@ namespace TYAPKurs
 			List<string> alphabetList = alphabet.Split(' ').ToList();
 
 			
-			int q = 0; 
-			
+			int q = 0;
 
-			if(side == 1)
+			int startChainLength = startChain.Length;
+			int endChainLength = endChain.Length;
+
+			if (side == 1)
 			{
 				string a = startChain;
 				startChain = endChain;
 				endChain = a;
 			}
 
-			
-			output.Add(new List<string> {"S", startChain, "Q"+q});
+			if (startChain != "" || startChain.Trim()=="")
+			{
+				foreach(string symbol in alphabetList)
+				{
+					output.Add(new List<string> { "S", symbol, "Q" + q });
+					startChain = symbol;
+					startChainLength = 1;
+				}
+				
+			} else
+			{
+				output.Add(new List<string> { "S", startChain, "Q" + q });
+			}
+
+			if (endChain == "" || endChain.Trim() == "")
+			{
+				endChainLength = 1;
+			}
+
+
 
 			if (maxChainLength - minChainLength >= multiple)
 			{
@@ -171,7 +191,7 @@ namespace TYAPKurs
 
 
 			
-			if (startChain.Length + endChain.Length % multiple != 0)
+			if (startChainLength + endChainLength % multiple != 0)
 			{
 				foreach (string symbol in alphabetList)
 				{
@@ -179,7 +199,7 @@ namespace TYAPKurs
 
 				}
 				q++;
-				for (int i = startChain.Length + endChain.Length; i < (multiple - ((startChain.Length + endChain.Length) % multiple))+1 ; i++)
+				for (int i = startChainLength + endChainLength; i < (multiple - ((startChainLength + endChainLength) % multiple))+1 ; i++)
 				{
 					foreach (string symbol in alphabetList)
 					{
@@ -195,8 +215,22 @@ namespace TYAPKurs
 
 
 
+			if (endChain == "" || endChain.Trim() == "")
+			{
+				foreach (string symbol in alphabetList)
+				{
+					output.Add(new List<string> { "Q" + (q), symbol, FinalChar });
+					endChain = symbol;
+				}
+			}
+			else
+			{
+				output.Add(new List<string> { "Q" + (q), endChain, FinalChar });
+			}
 
-			output.Add(new List<string> { "Q"+(q ), endChain, FinalChar });
+
+
+
 			q++;
 
 			
