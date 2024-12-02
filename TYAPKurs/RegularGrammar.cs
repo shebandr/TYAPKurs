@@ -153,12 +153,8 @@ namespace TYAPKurs
 
 			if (startChain == "" || startChain.Trim()=="")
 			{
-				foreach(string symbol in alphabetList)
-				{
-					output.Add(new List<string> { "S", symbol, "Q" + q });
-					startChain = symbol;
-					startChainLength = 1;
-				}
+				output.Add(new List<string> { "S", "", "Q" + q });
+
 				
 			} else
 			{
@@ -167,86 +163,129 @@ namespace TYAPKurs
 
 			if (endChain == "" || endChain.Trim() == "")
 			{
-				endChainLength = 1;
 			}
 
 
-
-
-			if (maxChainLength - minChainLength >= multiple)
+			if (multiple != 1) 
 			{
-				for (int i = 0; i < multiple-1; i++)
+
+
+				/*				if (maxChainLength - minChainLength >= multiple)
+								{
+									for (int i = 0; i < multiple - 1; i++)
+									{
+										foreach (string symbol in alphabetList)
+										{
+											output.Add(new List<string> { "Q" + (i), symbol, "Q" + (i + 1) });
+										}
+										q = i;
+									}
+									foreach (string symbol in alphabetList)
+									{
+										output.Add(new List<string> { "Q" + (q + 1), symbol, "Q" + (0) });
+									}
+									q++;
+								}*/
+
+				Console.WriteLine(multiple + " " + startChainLength + " " + endChainLength + " " + (startChainLength + endChainLength) % multiple + " " + (startChainLength + endChainLength % multiple) + " " + (multiple - ((startChainLength + endChainLength) % multiple)));
+
+
+
+
+				//случай, когда сумма нач и кон строк != 0 или != кратность, из-за чего надо догнать разницу, это нужно не всегда
+				int i;
+				if(startChainLength + endChainLength==0 || (startChainLength + endChainLength) % multiple != 0){
+
+				}
+				for (i = 0; i < (multiple - ((startChainLength + endChainLength) % multiple)); i++)
 				{
 					foreach (string symbol in alphabetList)
 					{
 						output.Add(new List<string> { "Q" + (i), symbol, "Q" + (i + 1) });
+						q = i + 1;
 					}
-					q = i;
 				}
-				foreach (string symbol in alphabetList)
-				{
-					output.Add(new List<string> { "Q" + (q+1), symbol, "Q" + (0) });
-				}
-				q++;
-			}
+		
 
+				//случай, когда сумма нач и кон строк = 0 или = кратность и надо просто гонять в цикле по кратности, это нужно всегда
 
-			if (startChainLength + endChainLength % multiple != 0)
-			{
-				foreach (string symbol in alphabetList)
-				{
-					output.Add(new List<string> { "Q" + (0), symbol, "Q" + (q + 1) });
-
-				}
-				q++;
-				for (int i = startChainLength + endChainLength; i < (multiple - ((startChainLength + endChainLength) % multiple))+1 ; i++)
+				
+				for ( i = 0; i < multiple-1; i++)
 				{
 					foreach (string symbol in alphabetList)
 					{
-						output.Add(new List<string> { "Q" + (q), symbol, "Q" + (q+1) });
-						
+						output.Add(new List<string> { "Q" + (q+i), symbol, "Q" + (q+i + 1) });
 					}
-					q++;
+				}
+				foreach (string symbol in alphabetList)
+				{
+					output.Add(new List<string> { "Q" + (q + i ), symbol, "Q" + (q ) });
 				}
 
-				
-			}
 
-			Console.WriteLine("Проверка для минимальной строки:  " + ((startChainLength + endChainLength) % multiple) + " " + (startChainLength + endChainLength) + " " + (startChainLength + endChainLength % multiple == 0 && startChainLength + endChainLength == minChainLength));
-			if ((startChainLength + endChainLength) % multiple == 0 && startChainLength + endChainLength == minChainLength)
+
+
+
+				if (endChain == "" || endChain.Trim() == "")
+				{
+					output.Add(new List<string> { "Q" + (q), "", FinalChar });
+
+				}
+				else
+				{
+					output.Add(new List<string> { "Q" + (q), endChain, FinalChar });
+				}
+
+			} else //кратность цепочек = 1
 			{
+
+				if (startChain == "")
+				{
+					foreach (string symbol in alphabetList)
+					{
+						output.Add(new List<string> { "S", symbol, FinalChar });
+						startChainLength = 1;
+					}
+
+				} else
+				{
+					output.Add(new List<string> { "S", startChain, FinalChar });
+				}
+
+
+
+				foreach (string symbol in alphabetList)
+				{
+					output.Add(new List<string> { "Q" + (0), symbol, "Q" + (1) });
+				}
+
+				foreach (string symbol in alphabetList)
+				{
+					output.Add(new List<string> { "Q" + (1), symbol, "Q" + (0) });
+				}
+
+
+
 				if (endChain == "" || endChain.Trim() == "")
 				{
 					foreach (string symbol in alphabetList)
 					{
+						output.Add(new List<string> { "Q" + (1), symbol, FinalChar });
+					}
+					foreach (string symbol in alphabetList)
+					{
 						output.Add(new List<string> { "Q" + (0), symbol, FinalChar });
-						endChain = symbol;
 					}
 				}
 				else
 				{
 					output.Add(new List<string> { "Q" + (0), endChain, FinalChar });
+					output.Add(new List<string> { "Q" + (1), endChain, FinalChar });
 				}
+
 			}
 
 
-			if (endChain == "" || endChain.Trim() == "")
-			{
-				foreach (string symbol in alphabetList)
-				{
-					output.Add(new List<string> { "Q" + (q), symbol, FinalChar });
-					endChain = symbol;
-				}
-			}
-			else
-			{
-				output.Add(new List<string> { "Q" + (q), endChain, FinalChar });
-			}
-
-
-
-
-			q++;
 
 			
 
@@ -297,8 +336,8 @@ namespace TYAPKurs
 
 		private  void RecursiveCalc(List<List<string>> rules, int minChainLength, int maxChainLength, int side, List<string> currentChainList, List<List<string>> allChangesChain, int recursionLevel)
 		{
-			Console.WriteLine(currentChainList[currentChainList.Count-1]);
-			if (recursionLevel > 50)
+			/*Console.WriteLine(currentChainList[currentChainList.Count-1]);*/
+			if (recursionLevel > maxChainLength+14)
 			{
 				Console.WriteLine("Превышена глубина рекурсии");
 				return;
@@ -317,12 +356,12 @@ namespace TYAPKurs
 					{
 						if (currentChainList[0] == FinalChar && currentChainList[1].Length >= minChainLength)
 						{
-							Console.WriteLine("добавляю шизу в общий список: " + allChangesChain[allChangesChain.Count - 1][0]);
+/*							Console.WriteLine("добавляю шизу в общий список: " + allChangesChain[allChangesChain.Count - 1][0]);
 							foreach(List<string> change in allChangesChain)
 							{
 								Console.Write(change[0] + change[1] + "->");
 							}
-							Console.WriteLine("\n");
+							Console.WriteLine("\n");*/
 							AllChains.Add(allChangesChain);
 						}
 						else if(currentChainList[0].ToString() != FinalChar)
@@ -351,12 +390,12 @@ namespace TYAPKurs
 					{
 						if (currentChainList[1] == FinalChar && currentChainList[0].Length >= minChainLength)
 						{
-							Console.WriteLine("добавляю шизу в общий список: " + allChangesChain[allChangesChain.Count - 1][1]);
+/*							Console.WriteLine("добавляю шизу в общий список: " + allChangesChain[allChangesChain.Count - 1][1]);
 							foreach (List<string> change in allChangesChain)
 							{
 								Console.Write(change[0] + change[1] + "->");
 							}
-							Console.WriteLine("\n");
+							Console.WriteLine("\n");*/
 							AllChains.Add(allChangesChain);
 						}
 						else if (currentChainList[1].ToString() != FinalChar)
