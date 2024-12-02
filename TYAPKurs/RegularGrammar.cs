@@ -172,6 +172,7 @@ namespace TYAPKurs
 
 
 
+
 			if (maxChainLength - minChainLength >= multiple)
 			{
 				for (int i = 0; i < multiple-1; i++)
@@ -190,7 +191,6 @@ namespace TYAPKurs
 			}
 
 
-			
 			if (startChainLength + endChainLength % multiple != 0)
 			{
 				foreach (string symbol in alphabetList)
@@ -212,7 +212,22 @@ namespace TYAPKurs
 				
 			}
 
-
+			Console.WriteLine("Проверка для минимальной строки:  " + ((startChainLength + endChainLength) % multiple) + " " + (startChainLength + endChainLength) + " " + (startChainLength + endChainLength % multiple == 0 && startChainLength + endChainLength == minChainLength));
+			if ((startChainLength + endChainLength) % multiple == 0 && startChainLength + endChainLength == minChainLength)
+			{
+				if (endChain == "" || endChain.Trim() == "")
+				{
+					foreach (string symbol in alphabetList)
+					{
+						output.Add(new List<string> { "Q" + (0), symbol, FinalChar });
+						endChain = symbol;
+					}
+				}
+				else
+				{
+					output.Add(new List<string> { "Q" + (0), endChain, FinalChar });
+				}
+			}
 
 
 			if (endChain == "" || endChain.Trim() == "")
