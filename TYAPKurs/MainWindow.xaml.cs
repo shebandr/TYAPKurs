@@ -2,7 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -140,18 +142,17 @@ namespace TYAPKurs
 			themeWindow.Show();
 		}
 
-		private void CalculateAllButtonClick(object sender, RoutedEventArgs e)
+		private async void CalculateAllButtonClick(object sender, RoutedEventArgs e)
 		{
-
 			List<string> settings = GetAllSettings();
 			List<List<string>> rules = new List<List<string>>();
-			List<List<List<string>>> chains = new List<List<List<string>>>();
+
 			string outputRules = "";
 			string outputChains = "";
 
-
 			if (settings.Count != 1)
 			{
+				ErrorTextBlock.Text = "Запушен процесс генерации цепочек, ожидайте";
 				rules = RegularGrammar.CalculateRegularGrammar(settings[0], settings[1], settings[2], Int32.Parse(settings[3]), Int32.Parse(settings[4]), Int32.Parse(settings[5]), Int32.Parse(settings[6]));
 				if (rules.Count != 1)
 				{
@@ -159,9 +160,22 @@ namespace TYAPKurs
 					{
 						outputRules += rules[i][0] + "->" + rules[i][1] + rules[i][2] + "\n";
 					}
-					RegularGrammar regularGrammar = new RegularGrammar();
 					RegularGrammarOutput.Text = outputRules;
-					chains = regularGrammar.CalculateStrings(rules, Int32.Parse(settings[4]), Int32.Parse(settings[5]), Int32.Parse(settings[6]));
+
+					try
+					{
+						chains = await CalculateStringsWithTimeoutAsync(rules, Int32.Parse(settings[4]), Int32.Parse(settings[5]), Int32.Parse(settings[6]), 400); // 45 секунд тайм-аут
+																																									 // Обработка результата
+					}
+					catch (TimeoutException ex)
+					{
+						ErrorTextBlock.Text = "Ошибка: генерация заняла слишком много времени";
+						return;
+					}
+					catch (Exception ex)
+					{
+						Console.WriteLine($"Ошибка: {ex.Message}");
+					}
 
 					for (int i = 0; i < chains.Count; i++)
 					{
@@ -170,66 +184,65 @@ namespace TYAPKurs
 					}
 					Console.WriteLine("Цепочек сгенерировано: " + chains.Count);
 					AllChainsOutput.Text = outputChains;
-					ErrorTextBlock.Text = "";
+					ErrorTextBlock.Text = "Генерация завершена";
 				}
 			}
 			else
 			{
 				ErrorTextBlock.Text = settings[0];
 			}
-
-
-
-
-
 		}
 
-		private void OutputAllDataChainsButtonClick(object sender, RoutedEventArgs e)
+		public static async Task<List<List<List<string>>>> CalculateStringsWithTimeoutAsync(List<List<string>> rules, int minChainLength, int maxChainLength, int side, int timeoutMilliseconds)
 		{
-			List<string> settings = GetAllSettings();
-			List<List<string>> rules = new List<List<string>>();
-			
-			string outputRules = "";
-			string outputChains = "";
+			var cts = new CancellationTokenSource();
+			cts.CancelAfter(timeoutMilliseconds);
 
-
-			if (settings.Count != 1)
+			try
 			{
-				rules = RegularGrammar.CalculateRegularGrammar(settings[0], settings[1], settings[2], Int32.Parse(settings[3]), Int32.Parse(settings[4]), Int32.Parse(settings[5]), Int32.Parse(settings[6]));
-				if (rules.Count != 1)
+				return await Task.Run(() =>
 				{
-					for (int i = 0; i < rules.Count; i++)
-					{
-						outputRules += rules[i][0] + "->" + rules[i][1] + rules[i][2] + "\n";
-					}
-					RegularGrammar regularGrammar = new RegularGrammar();
-					RegularGrammarOutput.Text = outputRules;
-					chains = regularGrammar.CalculateStrings(rules, Int32.Parse(settings[4]), Int32.Parse(settings[5]), Int32.Parse(settings[6]));
-
-					for (int i = 0; i < chains.Count; i++)
-					{
-						outputChains += i + ") ";
-						for(int q = 0; q< chains[i].Count-1; q++)
-						{
-							outputChains += chains[i][q][0] + chains[i][q][1] + "->";
-						}
-						outputChains += chains[i][chains[i].Count - 1][0] + chains[i][chains[i].Count - 1][1] + " \n";
-					}
-					Console.WriteLine("Цепочек сгенерировано: " + chains.Count);
-					AllChainsOutput.Text = outputChains;
-					ErrorTextBlock.Text = "";
-				}
+					return new RegularGrammar().CalculateStrings(rules, minChainLength, maxChainLength, side, cts.Token);
+				}, cts.Token).ConfigureAwait(false);
 			}
-			else
+			catch (OperationCanceledException)
 			{
-				ErrorTextBlock.Text = settings[0];
+				throw new TimeoutException("Вычисление заняло слишком много времени.");
 			}
+			finally
+			{
+				cts.Dispose();
+			}
+		}
+	
 
+
+
+
+
+
+	private void OutputAllDataChainsButtonClick(object sender, RoutedEventArgs e)
+		{
+			StringBuilder outputChains = new StringBuilder();
+
+			ErrorTextBlock.Text = "Начата перестройка вывода";
+			
+			for (int i = 0; i < chains.Count; i++)
+			{
+				outputChains.Append(i + ") ");
+				for (int q = 0; q < chains[i].Count - 1; q++)
+				{
+					outputChains.Append(chains[i][q][0] + chains[i][q][1] + "->");
+				}
+				outputChains.Append(chains[i][chains[i].Count - 1][0] + chains[i][chains[i].Count - 1][1] + " \n");
+			}
+			AllChainsOutput.Text = outputChains.ToString();
+			ErrorTextBlock.Text = "Вывод завершен";
 		}
 
 		private List<string> GetAllSettings()
 		{
-			Console.WriteLine("СЧИТЫВАНИЕ НАСТРОЕК!!!!");
+			Console.WriteLine("СЧИТЫВАНИЕ НАСТРОЕК");
 			List<string> settings = new List<string>
 			{
 				StartChainInput.Text,

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Policy;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace TYAPKurs
@@ -313,31 +314,44 @@ namespace TYAPKurs
 
 
 
-		public  List<List<List<string>>> CalculateStrings(List<List<string>> rules, int minChainLength, int maxChainLength, int side)
+		public List<List<List<string>>> CalculateStrings(List<List<string>> rules, int minChainLength, int maxChainLength, int side, CancellationToken cancellationToken)
 		{
 			List<string> startChain = new List<string>();
 			if (side == 1)
 			{
-				startChain = new List<string> { "" , rules[0][0]};
+				startChain = new List<string> { "", rules[0][0] };
 			}
 			else
 			{
 				startChain = new List<string> { rules[0][0], "" };
-
 			}
-			RecursiveCalc(rules, minChainLength, maxChainLength, side, startChain, new List<List<string>>(), 0);
 
-			return AllChains.ToList();
+			RecursiveCalc(rules, minChainLength, maxChainLength, side, startChain, new List<List<string>>(), 0, cancellationToken);
+
+			if (side == 1)
+			{
+				return AllChains
+					.OrderBy(chain => chain.Last().Last())
+					.OrderBy(chain => chain.Last().Last().Count())
+					.ToList();
+			}
+			else
+			{
+				return AllChains
+					.OrderBy(chain => chain.Last().First())
+					.OrderBy(chain => chain.Last().First().Count())
+					.ToList();
+			}
 		}
 
-
-
-
-
-		private  void RecursiveCalc(List<List<string>> rules, int minChainLength, int maxChainLength, int side, List<string> currentChainList, List<List<string>> allChangesChain, int recursionLevel)
+		private void RecursiveCalc(List<List<string>> rules, int minChainLength, int maxChainLength, int side, List<string> currentChainList, List<List<string>> allChangesChain, int recursionLevel, CancellationToken cancellationToken)
 		{
-			/*Console.WriteLine(currentChainList[currentChainList.Count-1]);*/
-			if (recursionLevel > maxChainLength+14)
+			if (cancellationToken.IsCancellationRequested)
+			{
+				return;
+			}
+
+			if (recursionLevel > maxChainLength + 14)
 			{
 				Console.WriteLine("Превышена глубина рекурсии");
 				return;
@@ -345,10 +359,9 @@ namespace TYAPKurs
 
 			if (side == 0)
 			{
-
-				for(int i = 0; i < rules.Count; i++)
+				for (int i = 0; i < rules.Count; i++)
 				{
-					if(currentChainList[1].Length > maxChainLength)
+					if (currentChainList[1].Length > maxChainLength)
 					{
 						break;
 					}
@@ -356,30 +369,20 @@ namespace TYAPKurs
 					{
 						if (currentChainList[0] == FinalChar && currentChainList[1].Length >= minChainLength)
 						{
-/*							Console.WriteLine("добавляю шизу в общий список: " + allChangesChain[allChangesChain.Count - 1][0]);
-							foreach(List<string> change in allChangesChain)
-							{
-								Console.Write(change[0] + change[1] + "->");
-							}
-							Console.WriteLine("\n");*/
 							AllChains.Add(allChangesChain);
 						}
-						else if(currentChainList[0].ToString() != FinalChar)
+						else if (currentChainList[0].ToString() != FinalChar)
 						{
 							List<string> currentChainList2 = new List<string> { rules[i][2].ToString(), rules[i][1].ToString() + currentChainList[1] };
 							List<List<string>> allChangesChain2 = allChangesChain.ToList();
-							allChangesChain2.Add(new List<string> {rules[i][1].ToString() + currentChainList[1], rules[i][2].ToString() });
-							RecursiveCalc(rules, minChainLength, maxChainLength, side, currentChainList2, allChangesChain2, recursionLevel+1);
+							allChangesChain2.Add(new List<string> { rules[i][1].ToString() + currentChainList[1], rules[i][2].ToString() });
+							RecursiveCalc(rules, minChainLength, maxChainLength, side, currentChainList2, allChangesChain2, recursionLevel + 1, cancellationToken);
 						}
-					} else
-					{
 					}
 				}
-				
 			}
 			else
 			{
-				
 				for (int i = 0; i < rules.Count; i++)
 				{
 					if (currentChainList[0].Length > maxChainLength)
@@ -390,29 +393,18 @@ namespace TYAPKurs
 					{
 						if (currentChainList[1] == FinalChar && currentChainList[0].Length >= minChainLength)
 						{
-/*							Console.WriteLine("добавляю шизу в общий список: " + allChangesChain[allChangesChain.Count - 1][1]);
-							foreach (List<string> change in allChangesChain)
-							{
-								Console.Write(change[0] + change[1] + "->");
-							}
-							Console.WriteLine("\n");*/
 							AllChains.Add(allChangesChain);
 						}
 						else if (currentChainList[1].ToString() != FinalChar)
 						{
-							List<string> currentChainList2 = new List<string> { currentChainList[0] + rules[i][2].ToString(), rules[i][1].ToString()};
+							List<string> currentChainList2 = new List<string> { currentChainList[0] + rules[i][2].ToString(), rules[i][1].ToString() };
 							List<List<string>> allChangesChain2 = allChangesChain.ToList();
-							allChangesChain2.Add(new List<string> {rules[i][1].ToString(),currentChainList[0] + rules[i][2].ToString() });
-							RecursiveCalc(rules, minChainLength, maxChainLength, side, currentChainList2, allChangesChain2, recursionLevel + 1);
+							allChangesChain2.Add(new List<string> { rules[i][1].ToString(), currentChainList[0] + rules[i][2].ToString() });
+							RecursiveCalc(rules, minChainLength, maxChainLength, side, currentChainList2, allChangesChain2, recursionLevel + 1, cancellationToken);
 						}
 					}
-					else
-					{
-					}
 				}
-
 			}
-
 		}
 
 	}
