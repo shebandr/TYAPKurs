@@ -188,24 +188,24 @@ namespace TYAPKurs
 									q++;
 								}*/
 
-				Console.WriteLine(multiple + " " + startChainLength + " " + endChainLength + " " + (startChainLength + endChainLength) % multiple + " " + (startChainLength + endChainLength % multiple) + " " + (multiple - ((startChainLength + endChainLength) % multiple)));
+				Console.WriteLine(multiple + " " + startChainLength + " " + endChainLength + " " + (startChainLength + endChainLength) % multiple + " " + (multiple - ((startChainLength + endChainLength) % multiple)));
 
 
 
 
 				//случай, когда сумма нач и кон строк != 0 или != кратность, из-за чего надо догнать разницу, это нужно не всегда
 				int i;
-				if(startChainLength + endChainLength==0 || (startChainLength + endChainLength) % multiple != 0){
-
-				}
-				for (i = 0; i < (multiple - ((startChainLength + endChainLength) % multiple)); i++)
-				{
-					foreach (string symbol in alphabetList)
+				if((startChainLength + endChainLength)==0 || (startChainLength + endChainLength) % multiple != 0){
+					for (i = 0; i < (multiple - ((startChainLength + endChainLength) % multiple)); i++)
 					{
-						output.Add(new List<string> { "Q" + (i), symbol, "Q" + (i + 1) });
-						q = i + 1;
+						foreach (string symbol in alphabetList)
+						{
+							output.Add(new List<string> { "Q" + (i), symbol, "Q" + (i + 1) });
+							q = i + 1;
+						}
 					}
 				}
+
 		
 
 				//случай, когда сумма нач и кон строк = 0 или = кратность и надо просто гонять в цикле по кратности, это нужно всегда
@@ -326,7 +326,7 @@ namespace TYAPKurs
 				startChain = new List<string> { rules[0][0], "" };
 			}
 
-			RecursiveCalc(rules, minChainLength, maxChainLength, side, startChain, new List<List<string>>(), 0, cancellationToken);
+			RecursiveCalc(rules, minChainLength, maxChainLength, side, startChain, new List<List<string>>{ new List<string> { "S", "" } }, 0, cancellationToken);
 
 			if (side == 1)
 			{

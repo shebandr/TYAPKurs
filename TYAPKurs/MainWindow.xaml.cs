@@ -184,7 +184,11 @@ namespace TYAPKurs
 					}
 					Console.WriteLine("Цепочек сгенерировано: " + chains.Count);
 					AllChainsOutput.Text = outputChains;
-					ErrorTextBlock.Text = "Генерация завершена";
+					if(ErrorTextBlock.Text!= "Ошибка: генерация заняла слишком много времени")
+					{
+						ErrorTextBlock.Text = "Генерация завершена";
+					}
+
 				}
 			}
 			else
