@@ -39,11 +39,17 @@ namespace TYAPKurs
 				return new List<string> { "Глобальная ошибка файла" };
 
 			}
-			
-			// как выглядит файл:
-			// 1 строка - начальная подцепочка; 2 - конечная подцепочка; 3 - алфавит; 4 - кратность; 5 - минимальная длина; 6 - максимальная длина; 7 - выбранная сторона
 
-			return config;
+			// как выглядит файл:'
+			// 1 строка - начальная подцепочка; 2 - конечная подцепочка; 3 - алфавит; 4 - кратность; 5 - минимальная длина; 6 - максимальная длина; 7 - выбранная сторона
+			if (RegularGrammar.CheckAllSettings(config) == "ok")
+			{
+
+                return config;
+            } else
+			{
+				return new List<string> { "no" };
+			}
 		}
 		public static string WriteToFile(string filePath, List<string> data)
 		{

@@ -45,6 +45,11 @@ namespace TYAPKurs
 			}
 			Console.WriteLine(filePath);
 			List<string> config = FileProcessor.ReadConfig(filePath);
+			if (config.Count!=7)
+			{
+				ErrorTextBlock.Text = "проблемы с конфигом";
+				return;
+			}
 			foreach (string configItem in config)
 			{
 				Console.WriteLine(configItem);
