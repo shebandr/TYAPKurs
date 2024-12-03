@@ -240,7 +240,7 @@ namespace TYAPKurs
 			} else //кратность цепочек = 1
 			{
 
-				if (startChain == "")
+				if (startChain == "" && endChain=="")
 				{
 					foreach (string symbol in alphabetList)
 					{
@@ -250,7 +250,11 @@ namespace TYAPKurs
 
 				} else
 				{
-					output.Add(new List<string> { "S", startChain, FinalChar });
+					if (startChain != "")
+					{
+						output.Add(new List<string> { "S", startChain, FinalChar });
+					}
+
 				}
 
 
