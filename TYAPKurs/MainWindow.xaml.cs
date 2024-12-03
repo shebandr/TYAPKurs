@@ -182,13 +182,31 @@ namespace TYAPKurs
 						Console.WriteLine($"Ошибка: {ex.Message}");
 					}
 
-					for (int i = 0; i < chains.Count; i++)
+                    for (int q = 0; q < chains.Count; q++)
+                    {
+                        if (chains[q][chains[q].Count - 1][0] == "_")
+                        {
+                            chains[q][chains[q].Count - 1][0] = "";
+
+                        }
+                        else
+                        {
+                            chains[q][chains[q].Count - 1][1] = "";
+
+                        }
+                    }
+
+                    for (int i = 0; i < chains.Count; i++)
 					{
 						outputChains += i + ") ";
 						outputChains += chains[i][chains[i].Count - 1][0] + chains[i][chains[i].Count - 1][1] + " \n";
 					}
 					Console.WriteLine("Цепочек сгенерировано: " + chains.Count);
-					AllChainsOutput.Text = outputChains;
+
+
+
+
+                    AllChainsOutput.Text = outputChains;
 					if(ErrorTextBlock.Text!= "Ошибка: генерация заняла слишком много времени")
 					{
 						ErrorTextBlock.Text = "Генерация завершена";

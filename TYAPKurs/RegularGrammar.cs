@@ -145,7 +145,7 @@ namespace TYAPKurs
 			int startChainLength = startChain.Length;
 			int endChainLength = endChain.Length;
 
-			if (side == 0)
+			if (side == 1)
 			{
 				string a = startChain;
 				startChain = endChain;
@@ -377,9 +377,10 @@ namespace TYAPKurs
 						}
 						else if (currentChainList[0].ToString() != FinalChar)
 						{
-							List<string> currentChainList2 = new List<string> { rules[i][2].ToString(), rules[i][1].ToString() + currentChainList[1] };
+
+							List<string> currentChainList2 = new List<string> { rules[i][2].ToString(), currentChainList[1] + rules[i][1].ToString() };
 							List<List<string>> allChangesChain2 = allChangesChain.ToList();
-							allChangesChain2.Add(new List<string> { rules[i][1].ToString() + currentChainList[1], rules[i][2].ToString() });
+							allChangesChain2.Add(new List<string> { currentChainList[1] + rules[i][1].ToString(), rules[i][2].ToString() });
 							RecursiveCalc(rules, minChainLength, maxChainLength, side, currentChainList2, allChangesChain2, recursionLevel + 1, cancellationToken);
 						}
 					}
@@ -401,9 +402,9 @@ namespace TYAPKurs
 						}
 						else if (currentChainList[1].ToString() != FinalChar)
 						{
-							List<string> currentChainList2 = new List<string> { currentChainList[0] + rules[i][2].ToString(), rules[i][1].ToString() };
+							List<string> currentChainList2 = new List<string> { rules[i][2].ToString()+ currentChainList[0], rules[i][1].ToString() };
 							List<List<string>> allChangesChain2 = allChangesChain.ToList();
-							allChangesChain2.Add(new List<string> { rules[i][1].ToString(), currentChainList[0] + rules[i][2].ToString() });
+							allChangesChain2.Add(new List<string> { rules[i][1].ToString(), rules[i][2].ToString() + currentChainList[0] });
 							RecursiveCalc(rules, minChainLength, maxChainLength, side, currentChainList2, allChangesChain2, recursionLevel + 1, cancellationToken);
 						}
 					}
